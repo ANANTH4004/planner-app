@@ -36,3 +36,20 @@ export const deleteLogsByHabit = async (habitId: string) => {
 
   await db.runAsync(`DELETE FROM habit_logs WHERE habit_id = ?`, [habitId])
 }
+
+export const getLogByHabitAndDate = async (
+  habitId: string,
+  date: string
+): Promise<HabitLog | null> => {
+  const db = await getDatabase()
+
+  const result: HabitLog | null = await db.getFirstAsync(
+    `
+    SELECT * FROM habit_logs
+    WHERE habit_id = ? AND date = ?
+    `,
+    [habitId, date]
+  )
+
+  return result ?? null
+}

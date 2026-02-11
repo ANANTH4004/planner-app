@@ -10,9 +10,9 @@ import { StatusBar } from 'expo-status-bar'
 import { useEffect, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 
+import { runMigrations } from '@/src/database/migration'
 import { getDatabase } from '../src/database/db'
 import { getAllHabits, insertHabit } from '../src/database/habitRepository'
-import { runMigrations } from '../src/database/migrations'
 
 export const unstable_settings = {
   anchor: '(tabs)',
