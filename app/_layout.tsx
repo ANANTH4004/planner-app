@@ -8,6 +8,7 @@ import dayjs from 'dayjs'
 import { Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import { useEffect, useState } from 'react'
+import 'react-native-get-random-values'
 import { v4 as uuidv4 } from 'uuid'
 
 import { runMigrations } from '@/src/database/migration'

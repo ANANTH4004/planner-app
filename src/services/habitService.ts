@@ -1,15 +1,15 @@
 import dayjs from 'dayjs'
 
+import 'react-native-get-random-values'
+import { v4 as uuidv4 } from 'uuid'
 import {
   getLogByHabitAndDate,
   getLogsByHabit,
   upsertHabitLog,
 } from '../database/habitLogRepository'
 import { getAllHabits, insertHabit } from '../database/habitRepository'
-import { calculateCurrentStreak } from '../domain/streakEngine'
+import { calculateStreaks } from '../domain/streakEngine'
 import { Habit } from '../domain/types'
-
-import { v4 as uuidv4 } from 'uuid'
 import { today } from '../utils/dateUtils'
 
 export const createHabit = async (title: string) => {
@@ -82,18 +82,19 @@ export const fetchHabitsWithStreak = async () => {
     habits.map(async (habit) => {
       const logs = await getLogsByHabit(habit.id)
 
-      const streak = calculateCurrentStreak(logs)
+      const { currentStreak, longestStreak } = calculateStreaks(logs)
 
       const isCompletedToday = logs.some(
-        (log) => log.date === today() && log.completed_count > 0
+        (log) => log.date === today() && log.completed_count > 0,
       )
 
       return {
         ...habit,
-        streak,
+        streak: currentStreak,
+        longestStreak,
         completedToday: isCompletedToday,
       }
-    })
+    }),
   )
 
   return enriched
